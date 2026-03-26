@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Edit Task</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>✏️ Edit Task</h1>
+    </header>
+    <div class="card">
+        <form th:action="@{/tasks/{id}/edit(id=${task.id})}" th:object="${task}" method="post">
+            <label>Title</label>
+            <input type="text" th:field="*{title}" placeholder="Task title..."/>
+            <p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+            <label>Description</label>
+            <textarea th:field="*{description}" placeholder="Description (optional)..."></textarea>
+            <label>Priority</label>
+            <select th:field="*{priority}">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+            </select>
+            <div class="form-row" style="margin-top:1rem">
+                <button type="submit">Save Changes</button>
+                <a href="/" class="btn-edit">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

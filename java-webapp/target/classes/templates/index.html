@@ -3,34 +3,73 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:text="${title}">Java Web App</title>
+    <title>Task Manager</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>☕ Java Web Application</h1>
-            <p class="subtitle">Powered by Spring Boot + Docker</p>
-        </header>
+<div class="container">
+    <header>
+        <h1>📝 Task Manager</h1>
+        <p class="subtitle">Powered by Spring Boot + Docker</p>
+    </header>
 
-        <div class="card">
-            <h2>Server Info</h2>
-            <p>🕐 Current Server Time: <strong th:text="${currentTime}">...</strong></p>
-            <p>✅ Status: <span class="badge">Running</span></p>
-            <p>🔗 API Endpoint: <a href="/api/status" target="_blank">/api/status</a></p>
+    <div class="stats">
+        <div class="stat-card">
+            <span class="stat-num" th:text="${totalCount}">0</span>
+            <span class="stat-label">Total</span>
         </div>
-
-        <div class="card">
-            <h2>Message Board</h2>
-            <form action="/message" method="post">
-                <input type="text" name="message" placeholder="Type a message..." required/>
-                <button type="submit">Post</button>
-            </form>
-            <ul class="messages" th:if="${!messages.isEmpty()}">
-                <li th:each="msg : ${messages}" th:text="${msg}">Message</li>
-            </ul>
-            <p class="empty" th:if="${messages.isEmpty()}">No messages yet. Post the first one!</p>
+        <div class="stat-card pending">
+            <span class="stat-num" th:text="${pendingCount}">0</span>
+            <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-card completed">
+            <span class="stat-num" th:text="${completedCount}">0</span>
+            <span class="stat-label">Completed</span>
         </div>
     </div>
+
+    <div th:if="${successMsg}" class="alert" th:text="${successMsg}"></div>
+
+    <div class="card">
+        <h2>Add New Task</h2>
+        <form th:action="@{/tasks}" th:object="${newTask}" method="post">
+            <div class="form-row">
+                <input type="text" th:field="*{title}" placeholder="Task title..." />
+                <select th:field="*{priority}">
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM" selected>Medium</option>
+                    <option value="HIGH">High</option>
+                </select>
+                <button type="submit">Add</button>
+            </div>
+            <p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+            <textarea th:field="*{description}" placeholder="Description (optional)..."></textarea>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Tasks</h2>
+        <p class="empty" th:if="${tasks.isEmpty()}">No tasks yet. Add one above!</p>
+        <ul class="task-list">
+            <li th:each="task : ${tasks}" th:classappend="${task.completed} ? 'done' : ''">
+                <div class="task-info">
+                    <span class="task-title" th:text="${task.title}">Task</span>
+                    <span class="badge" th:text="${task.priority}"
+                          th:classappend="${task.priority.name() == 'HIGH'} ? 'high' : (${task.priority.name() == 'LOW'} ? 'low' : 'medium')">MEDIUM</span>
+                    <p class="task-desc" th:if="${task.description}" th:text="${task.description}"></p>
+                </div>
+                <div class="task-actions">
+                    <form th:action="@{/tasks/{id}/toggle(id=${task.id})}" method="post">
+                        <button type="submit" class="btn-toggle" th:text="${task.completed} ? 'Undo' : 'Done'">Done</button>
+                    </form>
+                    <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn-edit">Edit</a>
+                    <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>
