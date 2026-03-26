@@ -16,7 +16,7 @@
     <artifactId>java-webapp</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>java-webapp</name>
+    <n>java-webapp</n>
     <description>Simple Java Web Application</description>
 
     <properties>
@@ -63,6 +63,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.webapp.JavaWebApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
