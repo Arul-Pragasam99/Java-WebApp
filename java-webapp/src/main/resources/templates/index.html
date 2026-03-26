@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title}">Java Web App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☕ Java Web Application</h1>
+            <p class="subtitle">Powered by Spring Boot + Docker</p>
+        </header>
+
+        <div class="card">
+            <h2>Server Info</h2>
+            <p>🕐 Current Server Time: <strong th:text="${currentTime}">...</strong></p>
+            <p>✅ Status: <span class="badge">Running</span></p>
+            <p>🔗 API Endpoint: <a href="/api/status" target="_blank">/api/status</a></p>
+        </div>
+
+        <div class="card">
+            <h2>Message Board</h2>
+            <form action="/message" method="post">
+                <input type="text" name="message" placeholder="Type a message..." required/>
+                <button type="submit">Post</button>
+            </form>
+            <ul class="messages" th:if="${!messages.isEmpty()}">
+                <li th:each="msg : ${messages}" th:text="${msg}">Message</li>
+            </ul>
+            <p class="empty" th:if="${messages.isEmpty()}">No messages yet. Post the first one!</p>
+        </div>
+    </div>
+</body>
+</html>
