@@ -16,7 +16,7 @@
     <artifactId>java-webapp</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <n>java-webapp</n>
+    <name>java-webapp</name>
     <description>Simple Java Web Application</description>
 
     <properties>
